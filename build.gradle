@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtime 'org.hsqldb:hsqldb'
     implementation 'org.axonframework:axon-spring-boot-starter:4.2'
     implementation 'org.axonframework:axon-micrometer:4.2'
     compileOnly 'org.projectlombok:lombok'

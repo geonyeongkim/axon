@@ -1,27 +1,22 @@
 package com.msa.instagram.clone.account.command;
 
-import com.msa.instagram.clone.account.model.vo.SignUpRequest;
-import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 /**
  * Created by geonyeong.kim on 2019-12-18
  */
 @Data
+@RequiredArgsConstructor
 public class SignUpCommand {
 
     @TargetAggregateIdentifier
-    private String id;
+    private final String id;
 
-    private SignUpRequest signUpRequest;
+//    private SignUpRequest signUpRequest;
 
-    private long timestamp;
+//    private long timestamp;
 
-    @Builder
-    public SignUpCommand(String id, SignUpRequest signUpRequest, long timestamp) {
-        this.id = id;
-        this.signUpRequest = signUpRequest;
-        this.timestamp = timestamp;
-    }
+
 }

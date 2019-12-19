@@ -18,18 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping("/api/v1/account")
 public class AccountController {
 
     private final AccountService accountService;
 
-    @PostMapping
+    @PostMapping(value = "signUp")
     public void signUp(@RequestBody SignUpRequest signUpRequest){
-        SignUpCommand signUpCommand = SignUpCommand.builder()
-                .id(UUID.randomUUID().toString())
-                .signUpRequest(signUpRequest)
-                .timestamp(System.currentTimeMillis())
-                .build();
+        log.info("signUo controller enter!");
+        SignUpCommand signUpCommand = new SignUpCommand("123");
+        log.info("signUpCommand => {}", signUpCommand);
         // command 로깅.
         accountService.singUp(signUpCommand);
     }
