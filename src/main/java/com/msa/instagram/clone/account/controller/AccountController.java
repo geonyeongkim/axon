@@ -3,10 +3,8 @@ package com.msa.instagram.clone.account.controller;
 import com.msa.instagram.clone.account.command.SignUpCommand;
 import com.msa.instagram.clone.account.model.vo.SignUpRequest;
 import com.msa.instagram.clone.account.service.AccountService;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,9 +22,9 @@ public class AccountController {
     private final AccountService accountService;
 
     @PostMapping(value = "signUp")
-    public void signUp(@RequestBody SignUpRequest signUpRequest){
+    public void signUp(@RequestBody SignUpRequest signUpRequest) {
         log.info("signUo controller enter!");
-        SignUpCommand signUpCommand = new SignUpCommand("123");
+        SignUpCommand signUpCommand = new SignUpCommand(1, "test");
         log.info("signUpCommand => {}", signUpCommand);
         // command 로깅.
         accountService.singUp(signUpCommand);

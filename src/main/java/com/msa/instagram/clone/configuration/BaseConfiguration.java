@@ -2,6 +2,7 @@ package com.msa.instagram.clone.configuration;
 
 import com.msa.instagram.clone.account.aggregate.AccountAggregate;
 import lombok.extern.slf4j.Slf4j;
+import org.axonframework.axonserver.connector.event.axon.AxonServerEventStore;
 import org.axonframework.common.caching.Cache;
 import org.axonframework.common.caching.WeakReferenceCache;
 import org.axonframework.eventsourcing.EventSourcingRepository;

@@ -12,7 +12,8 @@ import org.axonframework.modelling.command.TargetAggregateIdentifier;
 public class SignUpCommand {
 
     @TargetAggregateIdentifier
-    private final String id;
+    private final Integer accountAggregateId;
+    private final String name;
 
 //    private SignUpRequest signUpRequest;
 

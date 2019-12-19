@@ -18,30 +18,29 @@ import static org.axonframework.modelling.command.AggregateLifecycle.apply;
  * Created by geonyeong.kim on 2019-12-18
  */
 @Slf4j
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Aggregate
 @AggregateRoot
 public class AccountAggregate {
 
     @AggregateIdentifier
-    private String id;
+    private Integer accountAggregateId;
+
+    private String name;
+
+    protected AccountAggregate() {
+    }
 
     @CommandHandler
-    public void handle(SignUpCommand signUpCommand) {
-        // TODO: logging
+    public AccountAggregate(SignUpCommand signUpCommand) {
         log.info("AccountAggregate handle!!!");
-//        SignUpRequest signUpRequest = signUpCommand.getSignUpRequest();
-//        log.info("signUpRequest => {}", signUpRequest );
-//        apply(SignUpEvent.builder()
-//                .signUpRequest(signUpRequest)
-//                .timestamp(System.currentTimeMillis())
-//        );
+        apply(new SignUpEvent(signUpCommand.getName(), System.currentTimeMillis()));
     }
 
     @EventSourcingHandler
     public void on(SignUpEvent signUpEvent) {
         log.info("AccountAggregate on!!");
         log.info("signUpEvent => {}", signUpEvent);
+
         // TODO: 이벤트 스토어 저장.
     }
 }

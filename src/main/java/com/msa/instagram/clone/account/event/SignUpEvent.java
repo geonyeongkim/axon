@@ -10,12 +10,11 @@ import lombok.Data;
 @Data
 public class SignUpEvent {
 
-    private SignUpRequest signUpRequest;
+    private String name;
     private long timestamp;
 
-    @Builder
-    public SignUpEvent(SignUpRequest signUpRequest, long timestamp) {
-        this.signUpRequest = signUpRequest;
+    public SignUpEvent(String name, long timestamp) {
+        this.name = name;
         this.timestamp = timestamp;
     }
 }
