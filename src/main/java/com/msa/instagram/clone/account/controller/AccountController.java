@@ -1,14 +1,14 @@
 package com.msa.instagram.clone.account.controller;
 
-import com.msa.instagram.clone.account.command.SignUpCommand;
-import com.msa.instagram.clone.account.model.vo.SignUpRequest;
+import com.msa.instagram.clone.account.command.AccountCreateCommand;
+import com.msa.instagram.clone.account.model.vo.AccountCreateRequest;
+import com.msa.instagram.clone.account.model.vo.AccountUpdateRequest;
+import com.msa.instagram.clone.account.repository.AccountRepository;
 import com.msa.instagram.clone.account.service.AccountService;
+import com.msa.instagram.clone.common.utils.JacksonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by geonyeong.kim on 2019-12-18
@@ -20,13 +20,23 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountController {
 
     private final AccountService accountService;
+    private final AccountRepository accountRepository;
 
-    @PostMapping(value = "signUp")
-    public void signUp(@RequestBody SignUpRequest signUpRequest) {
-        log.info("signUo controller enter!");
-        SignUpCommand signUpCommand = new SignUpCommand(1, "test");
-        log.info("signUpCommand => {}", signUpCommand);
-        // command 로깅.
-        accountService.singUp(signUpCommand);
+    @PostMapping(value = "create")
+    public void create(@RequestBody AccountCreateRequest accountCreateRequest) {
+        log.info("accountRepository => {}", accountRepository);
+        final AccountCreateCommand command = new AccountCreateCommand(accountCreateRequest);
+        accountService.create(command);
+
+    }
+
+    @PostMapping(value = "update")
+    public void update(@RequestBody AccountUpdateRequest accountUpdateRequest) {
+        log.info("accountUpdateRequest => {}", accountUpdateRequest);
+    }
+
+    @PostMapping(value = "delete/{id}")
+    public void delete(@PathVariable long id) {
+        log.info("id => {}", id);
     }
 }

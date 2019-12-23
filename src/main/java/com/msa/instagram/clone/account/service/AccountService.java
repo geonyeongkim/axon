@@ -1,6 +1,6 @@
 package com.msa.instagram.clone.account.service;
 
-import com.msa.instagram.clone.account.command.SignUpCommand;
+import com.msa.instagram.clone.account.command.AccountCreateCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -16,14 +16,9 @@ public class AccountService {
 
     private final CommandGateway commandGateway;
 
-    public void singUp(SignUpCommand signUpCommand) {
-        log.info("accountSrvice singUp!!!");
-        long start = System.currentTimeMillis();
-        log.info("start time => {}", start);
-        Object result = commandGateway.sendAndWait(signUpCommand);
-        log.info("result => {}", result);
-        // TODO: logging
-        long end = System.currentTimeMillis();
-        log.info("event process duration => {}", end - start);
+
+    public void create(AccountCreateCommand command) {
+        // 필수 필드 체크
+        commandGateway.sendAndWait(command);
     }
 }

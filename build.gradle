@@ -21,8 +21,10 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.data:spring-data-mongodb:2.2.3.RELEASE'
     implementation 'com.h2database:h2'
-    implementation 'org.axonframework:axon-spring-boot-starter:4.0'
+    implementation 'org.axonframework:axon-spring-boot-starter:4.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
