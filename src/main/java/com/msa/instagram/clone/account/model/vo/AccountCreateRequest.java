@@ -8,6 +8,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class AccountCreateRequest {
+
     private String userName;
     private String password;
     private String ninkname;

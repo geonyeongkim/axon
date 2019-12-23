@@ -2,15 +2,19 @@ package com.msa.instagram.clone.account.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.msa.instagram.clone.account.enums.Gender;
-import com.msa.instagram.clone.account.model.vo.AccountCreateRequest;
-import java.util.UUID;
+import com.msa.instagram.clone.account.model.vo.AccountUpdateRequest;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
+/**
+ * Created by geonyeong.kim on 2019-12-23
+ */
 @Getter
 @ToString
-public class AccountCreateCommand {
+@NoArgsConstructor
+public class AccountUpdateCommand {
 
     @TargetAggregateIdentifier
     private String id;
@@ -28,8 +32,8 @@ public class AccountCreateCommand {
     private String profileUrl;
     private long timestamp;
 
-    public AccountCreateCommand(AccountCreateRequest request) {
-        this.id = UUID.randomUUID().toString();
+    public AccountUpdateCommand(AccountUpdateRequest request) {
+        this.id = request.getId();
         this.userName = request.getUserName();
         this.password = request.getPassword();
         this.ninkname = request.getNinkname();

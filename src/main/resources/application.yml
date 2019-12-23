@@ -1,3 +1,5 @@
+javamelody:
+  advisor-auto-proxy-creator-enabled: false
 axon:
   axonserver:
     servers: dev-geon-axonserver-ncl.nfra.io
