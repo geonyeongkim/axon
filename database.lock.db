@@ -1,6 +1,6 @@
 #FileLock
-#Mon Dec 23 21:18:03 KST 2019
-server=10.64.41.223\:59214
-hostName=10.64.41.223
+#Sun Dec 29 21:12:56 KST 2019
+server=10.25.208.184\:62090
+hostName=10.25.208.184
 method=file
-id=16f32b1473fa133391b917d8256f7d6585edb3c99ef
+id=16f5192d361b149f2d3e57aeefb8e35c902ec4886c3

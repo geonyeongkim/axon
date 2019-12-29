@@ -13,7 +13,7 @@ public class AccountUpdateRequest {
     private String id;
     private String userName;
     private String password;
-    private String ninkname;
+    private String nickname;
     private boolean isActive;
     private String website;
     private String intro;

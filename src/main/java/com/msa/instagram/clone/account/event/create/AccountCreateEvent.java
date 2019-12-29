@@ -18,7 +18,7 @@ public class AccountCreateEvent implements AccountEvent {
     private String id;
     private String userName;
     private String password;
-    private String ninkname;
+    private String nickname;
     @JsonProperty("isActive")
     private boolean isActive;
     private String website;
@@ -32,7 +32,7 @@ public class AccountCreateEvent implements AccountEvent {
     public AccountCreateEvent(AccountCreateCommand command) {
         this.userName = command.getUserName();
         this.password = command.getPassword();
-        this.ninkname = command.getNinkname();
+        this.nickname = command.getNickname();
         this.isActive = command.isActive();
         this.website = command.getWebsite();
         this.intro = command.getIntro();

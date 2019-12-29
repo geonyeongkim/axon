@@ -12,12 +12,12 @@ public interface AccountRepository extends MongoRepository<AccountDocument, Stri
             value = "{'event.userName': ?0}",
             sort = "{'timestamp' : -1}"
     )
-    List<AccountDocument> findByUserNamesOrderOrderByTimestampDesc(final String userName);
+    List<AccountDocument> findByUserNamesOrderByTimestampDesc(final String userName);
 
     @Query(
             value = "{'event.userName': ?0}",
             sort = "{'timestamp' : 1}"
     )
-    List<AccountDocument> findByUserNamesOrderOrderByTimestampAsc(final String userName);
+    List<AccountDocument> findByUserNamesOrderByTimestampAsc(final String userName);
 
 }

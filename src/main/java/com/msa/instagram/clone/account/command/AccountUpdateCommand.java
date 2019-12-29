@@ -21,7 +21,7 @@ public class AccountUpdateCommand {
 
     private String userName;
     private String password;
-    private String ninkname;
+    private String nickname;
     @JsonProperty("isActive")
     private boolean isActive;
     private String website;
@@ -36,7 +36,7 @@ public class AccountUpdateCommand {
         this.id = request.getId();
         this.userName = request.getUserName();
         this.password = request.getPassword();
-        this.ninkname = request.getNinkname();
+        this.nickname = request.getNickname();
         this.isActive = request.isActive();
         this.website = request.getWebsite();
         this.intro = request.getIntro();
