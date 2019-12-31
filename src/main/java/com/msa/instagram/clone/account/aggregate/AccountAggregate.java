@@ -8,8 +8,8 @@ import com.msa.instagram.clone.account.enums.AccountAggregateField;
 import com.msa.instagram.clone.account.enums.Gender;
 import com.msa.instagram.clone.account.event.create.AccountCreateEvent;
 import com.msa.instagram.clone.account.event.update.AccountUpdateEvent;
-import com.msa.instagram.clone.account.model.document.AccountDocument;
-import com.msa.instagram.clone.account.repository.AccountRepository;
+import com.msa.instagram.clone.account.model.document.AccountMongoDocument;
+import com.msa.instagram.clone.account.repository.AccountMongoRepository;
 import com.msa.instagram.clone.common.enums.EventType;
 
 import java.util.ArrayList;
@@ -39,6 +39,7 @@ import org.axonframework.spring.stereotype.Aggregate;
 @Setter
 public class AccountAggregate {
 
+
     @AggregateIdentifier
     private String id;
 
@@ -54,11 +55,11 @@ public class AccountAggregate {
     private String profileUrl;
 
     @CommandHandler
-    public AccountAggregate(AccountCreateCommand command, AccountRepository accountRepository) {
+    public AccountAggregate(AccountCreateCommand command, AccountMongoRepository accountRepository) {
 
         log.info("AccountAggregate constructor!!!");
 
-        final List<AccountDocument> accountDocumentList = accountRepository
+        final List<AccountMongoDocument> accountDocumentList = accountRepository
                 .findByUserNamesOrderByTimestampDesc(command.getUserName());
 
         if(CollectionUtils.isNotEmpty(accountDocumentList) && accountDocumentList.get(0).getEventType() != EventType.DELETE) {
@@ -68,17 +69,17 @@ public class AccountAggregate {
             throw new RuntimeException();
         }
         AccountCreateEvent accountCreateEvent = new AccountCreateEvent(command);
-        final AccountDocument saveAccountDocument = accountRepository.save(new AccountDocument(accountCreateEvent));
+        final AccountMongoDocument saveAccountDocument = accountRepository.save(new AccountMongoDocument(accountCreateEvent));
         accountCreateEvent.setId(saveAccountDocument.getId());
         log.info("accountCreateEvent => {}", accountCreateEvent);
         apply(accountCreateEvent);
     }
 
     @CommandHandler
-    public void handle(AccountUpdateCommand command, AccountRepository accountRepository) {
+    public void handle(AccountUpdateCommand command, AccountMongoRepository accountRepository) {
         log.info("account aggregate update handle!!!");
         log.info("acountUpdateCommand => {}", command);
-        final List<AccountDocument> accountDocument = accountRepository.findByUserNamesOrderByTimestampAsc(command.getUserName());
+        final List<AccountMongoDocument> accountDocument = accountRepository.findByUserNamesOrderByTimestampAsc(command.getUserName());
         /*
          * command로 들어온 값과 이벤트 스토어에서 데이터를 가져와 replay한 후에 diff!!!
          * 변경 분만 update 하기!!!
@@ -92,7 +93,7 @@ public class AccountAggregate {
         if(!accountUpdateEventOptional.isPresent()) {
             throw new RuntimeException("not chnage!!");
         }
-        accountRepository.save(new AccountDocument(accountUpdateEventOptional.get()));
+        accountRepository.save(new AccountMongoDocument(accountUpdateEventOptional.get()));
         apply(accountUpdateEventOptional.get());
     }
 
@@ -104,13 +105,13 @@ public class AccountAggregate {
     @EventSourcingHandler
     public void on (AccountUpdateEvent event) {
         log.info("event => {}", event);
-        final AccountDocument accountDocument = new AccountDocument(event);
+        final AccountMongoDocument accountDocument = new AccountMongoDocument(event);
         log.info("accountDocument => {}", accountDocument);
         updateEventApply(accountDocument);
         log.info("accountAggregate => {}", this);
     }
 
-    public void replay(AccountDocument accountDocument) {
+    public void replay(AccountMongoDocument accountDocument) {
         switch (accountDocument.getEventType()) {
             case CREATE:
                 createEventApply(accountDocument);
@@ -123,12 +124,12 @@ public class AccountAggregate {
         }
     }
 
-    private void updateEventApply(AccountDocument accountDocument) {
+    private void updateEventApply(AccountMongoDocument accountDocument) {
         AccountUpdateEvent accountUpdateEvent = (AccountUpdateEvent) accountDocument.getEvent();
         accountDocument.getAggregateFieldList().forEach(item -> item.replay(this, accountUpdateEvent));
     }
 
-    private void createEventApply(AccountDocument accountDocument) {
+    private void createEventApply(AccountMongoDocument accountDocument) {
         setByCreateEvent((AccountCreateEvent) accountDocument.getEvent());
         this.id = accountDocument.getId();
     }

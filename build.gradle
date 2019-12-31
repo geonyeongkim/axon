@@ -27,6 +27,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
     implementation 'commons-collections:commons-collections:3.2.2'
     implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation 'org.springframework.data:spring-data-elasticsearch:3.2.3.RELEASE'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {

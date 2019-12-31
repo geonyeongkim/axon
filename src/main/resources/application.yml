@@ -5,6 +5,9 @@ axon:
     servers: dev-geon-axonserver-ncl.nfra.io
 spring:
   data:
+    es:
+      address: dev-geon-es001-ncl.nfra.io
+      clusterName: msa-study
     mongodb:
       address: mongodb://dev-geon-mongo-ncl.nfra.io:27017
       database: msa

@@ -16,7 +16,7 @@ import java.util.List;
 @Getter @ToString
 @NoArgsConstructor
 @Document(value = "account")
-public class AccountDocument {
+public class AccountMongoDocument {
 
     @Id
     private String id;
@@ -25,13 +25,13 @@ public class AccountDocument {
     private List<AccountAggregateField> aggregateFieldList;
     private long timestamp;
 
-    public AccountDocument(AccountCreateEvent event) {
+    public AccountMongoDocument(AccountCreateEvent event) {
         this.eventType = EventType.CREATE;
         this.event = event;
         this.timestamp = event.getTimestamp();
     }
 
-    public AccountDocument(AccountUpdateEvent event) {
+    public AccountMongoDocument(AccountUpdateEvent event) {
         this.eventType = EventType.UPDATE;
         this.event = event;
         this.aggregateFieldList = event.getAccountAggregateFields();
