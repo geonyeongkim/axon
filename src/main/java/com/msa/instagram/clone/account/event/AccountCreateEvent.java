@@ -3,18 +3,15 @@ package com.msa.instagram.clone.account.event;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.msa.instagram.clone.account.command.AccountCreateCommand;
 import com.msa.instagram.clone.account.enums.Gender;
-import com.msa.instagram.clone.account.event.AccountEvent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.UUID;
-
 @Getter
 @NoArgsConstructor
 @ToString
-public class AccountCreateEvent implements AccountEvent {
+public class AccountCreateEvent {
 
     @Setter
     private String id;

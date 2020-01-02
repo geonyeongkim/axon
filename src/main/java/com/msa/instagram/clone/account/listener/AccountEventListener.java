@@ -51,7 +51,7 @@ public class AccountEventListener {
 
     @EventHandler
     public void handle(AccountDeleteEvent event) {
-        elasticsearchTemplate.update(makeUpdateQuery(event.getId(), new HashMap(){{put(AccountEsField.IS_ACTIVE.getEsFieldName(), false);}}));
+        elasticsearchTemplate.update(makeUpdateQuery(event.getId(), new HashMap(){{put(AccountEsField.getIsActiveFieldName(), false);}}));
     }
 
     private UpdateQuery makeUpdateQuery(String id, Map map) {

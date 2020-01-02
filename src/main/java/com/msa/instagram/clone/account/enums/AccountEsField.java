@@ -1,18 +1,15 @@
 package com.msa.instagram.clone.account.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.Arrays;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum AccountEsField {
 
     USER_NAME(AccountAggregateField.USER_NAME, "userName"),
     PASSWORD(AccountAggregateField.PASSWORD, "password"),
     NICK_NAME(AccountAggregateField.NICK_NAME, "nickname"),
-    IS_ACTIVE(AccountAggregateField.IS_ACTIVE, "isActive"),
     WEB_SITE(AccountAggregateField.WEB_SITE, "website"),
     INTRO(AccountAggregateField.INTRO, "intro"),
     EMAIL(AccountAggregateField.EMAIL, "email"),
@@ -20,8 +17,9 @@ public enum AccountEsField {
     GENDER(AccountAggregateField.GENDER, "gender"),
     PROFILE_URL(AccountAggregateField.PROFILE_URL, "profileUrl")
     ;
-    private AccountAggregateField accountAggregateField;
-    private String esFieldName;
+    private static final String isActiveFieldName = "isActive";
+    private final AccountAggregateField accountAggregateField;
+    private final String esFieldName;
 
     public static AccountEsField getAccountEsFieldByAccountAggregateField(AccountAggregateField aggregateField) {
         for(AccountEsField accountEsField : values()) {
@@ -30,5 +28,9 @@ public enum AccountEsField {
             }
         }
         throw new RuntimeException("NOT MATCHED FIELD");
+    }
+
+    public static String getIsActiveFieldName() {
+        return isActiveFieldName;
     }
 }

@@ -55,11 +55,9 @@ public class AccountAggregate {
 
     @CommandHandler
     public AccountAggregate(AccountCreateCommand command) {
+        // TODO: profile 업로드
         log.info("AccountCreateCommand => {}", command);
         if(this.isActive) {
-            /*
-             * 이벤트 스토어 account 생성 이벤트 전 validation
-             * */
             throw new RuntimeException("already account exist!!");
         }
         apply(new AccountCreateEvent(command));
@@ -105,16 +103,12 @@ public class AccountAggregate {
     @EventSourcingHandler
     public void on (AccountUpdateEvent event) {
         log.info("AccountAggregate AccountUpdateEvent => {}", event);
-        updateEventApply(event);
+        event.getAccountAggregateFields().forEach(item -> item.updateAccountAggreate(this, event));
     }
 
     @EventSourcingHandler
     public void on(AccountDeleteEvent accountDeleteEvent) {
         this.isActive = false;
-    }
-
-    private void updateEventApply(AccountUpdateEvent accountUpdateEvent) {
-        accountUpdateEvent.getAccountAggregateFields().forEach(item -> item.replay(this, accountUpdateEvent));
     }
 
     private Optional<AccountUpdateEvent> diff(AccountUpdateCommand command) {
@@ -137,11 +131,6 @@ public class AccountAggregate {
         if(Objects.nonNull(command.getNickname()) && !StringUtils.equals(this.nickname, command.getNickname())) {
             accountUpdateEventBuilder.nickname(command.getNickname());
             aggregateFieldList.add(AccountAggregateField.NICK_NAME);
-            diffFlag = true;
-        }
-        if(this.isActive != command.isActive()) {
-            accountUpdateEventBuilder.isActive(command.isActive());
-            aggregateFieldList.add(AccountAggregateField.IS_ACTIVE);
             diffFlag = true;
         }
         if(Objects.nonNull(command.getWebsite()) && !StringUtils.equals(this.website, command.getWebsite())) {
