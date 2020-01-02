@@ -1,10 +1,13 @@
 package com.msa.instagram.clone.account.service;
 
 import com.msa.instagram.clone.account.command.AccountCreateCommand;
+import com.msa.instagram.clone.account.command.AccountDeleteCommand;
 import com.msa.instagram.clone.account.command.AccountUpdateCommand;
+import com.msa.instagram.clone.account.repository.AccountEsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.hibernate.validator.internal.metadata.core.AnnotationProcessingOptionsImpl;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,16 +20,15 @@ public class AccountService {
 
     private final CommandGateway commandGateway;
 
-
     public void create(AccountCreateCommand command) {
-        // 필수 필드 체크
         commandGateway.sendAndWait(command);
-        log.info("complete create");
     }
 
     public void update(AccountUpdateCommand command) {
-        log.info("account service update ");
         commandGateway.sendAndWait(command);
-        log.info("complete update");
+    }
+
+    public void delete(AccountDeleteCommand command) {
+        commandGateway.sendAndWait(command);
     }
 }

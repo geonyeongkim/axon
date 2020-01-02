@@ -1,19 +1,16 @@
 javamelody:
   advisor-auto-proxy-creator-enabled: false
 axon:
+  snapshot:
+    count: 50
   axonserver:
     servers: dev-geon-axonserver-ncl.nfra.io
 spring:
   data:
     es:
-      address: dev-geon-es001-ncl.nfra.io
+      host: dev-geon-es001-ncl.nfra.io
+      port: 9300
       clusterName: msa-study
     mongodb:
-      address: mongodb://dev-geon-mongo-ncl.nfra.io:27017
-      database: msa
-  jpa:
-    hibernate:
-      ddl-auto: update
-  datasource:
-    url: jdbc:h2:./database;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE
-
+      host: dev-geon-mongo-ncl.nfra.io
+      port: 27017

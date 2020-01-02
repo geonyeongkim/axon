@@ -1,25 +1,31 @@
 package com.msa.instagram.clone.account.model.document;
 
 import com.msa.instagram.clone.account.enums.Gender;
+import com.msa.instagram.clone.account.event.AccountCreateEvent;
+import com.msa.instagram.clone.account.event.AccountUpdateEvent;
+import lombok.*;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+
+import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Id;
-import lombok.Builder;
-import org.springframework.data.elasticsearch.annotations.Document;
 
 /**
  * Created by geonyeong.kim on 2019-12-31
  */
+@Data
 @Document(indexName = "account", type = "_doc")
 public class AccountEsDocument {
 
     @Id
     private String id;
-
     private String userName;
     private String password;
     private String nickname;
-    private boolean isActive;
+    @Field(type = FieldType.Boolean)
+    private Boolean isActive;
     private String website;
     private String intro;
     private String email;
@@ -29,22 +35,16 @@ public class AccountEsDocument {
     private List<String> followerIdList = new ArrayList<>();
     private List<String> followingIdList = new ArrayList<>();;
 
-    @Builder
-    public AccountEsDocument(String id, String userName, String password, String nickname, boolean isActive, String website, String intro,
-            String email, String telephone, Gender gender, String profileUrl, List<String> followerIdList,
-            List<String> followingIdList) {
-        this.id = id;
-        this.userName = userName;
-        this.password = password;
-        this.nickname = nickname;
-        this.isActive = isActive;
-        this.website = website;
-        this.intro = intro;
-        this.email = email;
-        this.telephone = telephone;
-        this.gender = gender;
-        this.profileUrl = profileUrl;
-        this.followerIdList = followerIdList;
-        this.followingIdList = followingIdList;
+    public AccountEsDocument(AccountCreateEvent event) {
+        this.id = event.getId();
+        this.userName = event.getUserName();
+        this.password = event.getPassword();
+        this.nickname = event.getNickname();
+        this.isActive = event.isActive();
+        this.website = event.getWebsite();
+        this.intro = event.getIntro();
+        this.email = event.getTelephone();
+        this.gender = event.getGender();
+        this.profileUrl = event.getProfileUrl();
     }
 }

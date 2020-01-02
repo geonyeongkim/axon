@@ -1,4 +1,4 @@
-package com.msa.instagram.clone.account.event.create;
+package com.msa.instagram.clone.account.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.msa.instagram.clone.account.command.AccountCreateCommand;
@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
@@ -30,10 +32,11 @@ public class AccountCreateEvent implements AccountEvent {
     private long timestamp;
     
     public AccountCreateEvent(AccountCreateCommand command) {
+        this.id = command.getId();
         this.userName = command.getUserName();
         this.password = command.getPassword();
         this.nickname = command.getNickname();
-        this.isActive = command.isActive();
+        this.isActive = true;
         this.website = command.getWebsite();
         this.intro = command.getIntro();
         this.email = command.getEmail();

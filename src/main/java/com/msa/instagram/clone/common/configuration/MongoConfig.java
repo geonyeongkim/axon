@@ -1,34 +1,25 @@
 package com.msa.instagram.clone.common.configuration;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
+
+import com.mongodb.MongoClient;
+import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
+import org.axonframework.mongo.DefaultMongoTemplate;
+import org.axonframework.mongo.eventsourcing.eventstore.MongoEventStorageEngine;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
-import org.springframework.data.mongodb.core.MongoTemplate;
 
 @Configuration
-public class MongoConfig  extends  AbstractMongoClientConfiguration {
+public class MongoConfig {
 
-    @Value("${spring.data.mongodb.address}")
-    private String mongodbAddress;
+    @Value("${spring.data.mongodb.host}")
+    private String mongoHost;
 
-    @Value("${spring.data.mongodb.database}")
-    private String mongodbDatabase;
-
-    @Override
-    public MongoClient mongoClient() {
-        return MongoClients.create(mongodbAddress);
-    }
-
-    @Override
-    protected String getDatabaseName() {
-        return mongodbDatabase;
-    }
+    @Value("${spring.data.mongodb.port}")
+    private int mongoPort;
 
     @Bean
-    public MongoTemplate mongoTemplate() {
-        return new MongoTemplate(mongoClient(), mongodbDatabase);
+    public MongoClient mongoClient() {
+        return new MongoClient(mongoHost, mongoPort);
     }
 }

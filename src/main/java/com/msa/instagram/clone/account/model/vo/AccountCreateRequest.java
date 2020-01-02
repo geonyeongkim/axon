@@ -12,8 +12,6 @@ public class AccountCreateRequest {
     private String userName;
     private String password;
     private String nickname;
-    @JsonProperty("isActive")
-    private boolean isActive;
     private String website;
     private String intro;
     private String email;

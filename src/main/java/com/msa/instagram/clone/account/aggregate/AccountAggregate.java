@@ -1,33 +1,33 @@
 package com.msa.instagram.clone.account.aggregate;
 
-import static org.axonframework.modelling.command.AggregateLifecycle.apply;
-
 import com.msa.instagram.clone.account.command.AccountCreateCommand;
+import com.msa.instagram.clone.account.command.AccountDeleteCommand;
 import com.msa.instagram.clone.account.command.AccountUpdateCommand;
 import com.msa.instagram.clone.account.enums.AccountAggregateField;
 import com.msa.instagram.clone.account.enums.Gender;
-import com.msa.instagram.clone.account.event.create.AccountCreateEvent;
-import com.msa.instagram.clone.account.event.update.AccountUpdateEvent;
-import com.msa.instagram.clone.account.model.document.AccountMongoDocument;
-import com.msa.instagram.clone.account.repository.AccountMongoRepository;
-import com.msa.instagram.clone.common.enums.EventType;
+import com.msa.instagram.clone.account.event.AccountCreateEvent;
+import com.msa.instagram.clone.account.event.AccountDeleteEvent;
+import com.msa.instagram.clone.account.event.AccountUpdateEvent;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.axonframework.commandhandling.CommandHandler;
+import org.axonframework.commandhandling.model.AggregateIdentifier;
+import org.axonframework.commandhandling.model.AggregateVersion;
+import org.axonframework.eventsourcing.EventSourcingHandler;
+import org.axonframework.spring.stereotype.Aggregate;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.axonframework.commandhandling.CommandHandler;
-import org.axonframework.eventsourcing.EventSourcingHandler;
-import org.axonframework.modelling.command.AggregateIdentifier;
-import org.axonframework.spring.stereotype.Aggregate;
+import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
+
+
 
 /**
  * Created by geonyeong.kim on 2019-12-18
@@ -35,10 +35,9 @@ import org.axonframework.spring.stereotype.Aggregate;
 @Slf4j
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Aggregate
+@Aggregate(repository = "accountAggregateEventSourcingRepository")
 @Setter
 public class AccountAggregate {
-
 
     @AggregateIdentifier
     private String id;
@@ -55,37 +54,20 @@ public class AccountAggregate {
     private String profileUrl;
 
     @CommandHandler
-    public AccountAggregate(AccountCreateCommand command, AccountMongoRepository accountRepository) {
-
-        log.info("AccountAggregate constructor!!!");
-
-        final List<AccountMongoDocument> accountDocumentList = accountRepository
-                .findByUserNamesOrderByTimestampDesc(command.getUserName());
-
-        if(CollectionUtils.isNotEmpty(accountDocumentList) && accountDocumentList.get(0).getEventType() != EventType.DELETE) {
+    public AccountAggregate(AccountCreateCommand command) {
+        log.info("AccountCreateCommand => {}", command);
+        if(this.isActive) {
             /*
              * 이벤트 스토어 account 생성 이벤트 전 validation
              * */
-            throw new RuntimeException();
+            throw new RuntimeException("already account exist!!");
         }
-        AccountCreateEvent accountCreateEvent = new AccountCreateEvent(command);
-        final AccountMongoDocument saveAccountDocument = accountRepository.save(new AccountMongoDocument(accountCreateEvent));
-        accountCreateEvent.setId(saveAccountDocument.getId());
-        log.info("accountCreateEvent => {}", accountCreateEvent);
-        apply(accountCreateEvent);
+        apply(new AccountCreateEvent(command));
     }
 
     @CommandHandler
-    public void handle(AccountUpdateCommand command, AccountMongoRepository accountRepository) {
-        log.info("account aggregate update handle!!!");
-        log.info("acountUpdateCommand => {}", command);
-        final List<AccountMongoDocument> accountDocument = accountRepository.findByUserNamesOrderByTimestampAsc(command.getUserName());
-        /*
-         * command로 들어온 값과 이벤트 스토어에서 데이터를 가져와 replay한 후에 diff!!!
-         * 변경 분만 update 하기!!!
-         * */
-        accountDocument.forEach(item -> replay(item));
-        log.info("account Document -> {}", accountDocument);
+    public void handle(AccountUpdateCommand command) {
+        log.info("AccountUpdateCommand => {}", command);
         /*
         * diff
         * */
@@ -93,48 +75,20 @@ public class AccountAggregate {
         if(!accountUpdateEventOptional.isPresent()) {
             throw new RuntimeException("not chnage!!");
         }
-        accountRepository.save(new AccountMongoDocument(accountUpdateEventOptional.get()));
         apply(accountUpdateEventOptional.get());
+    }
+
+    @CommandHandler
+    public void handle(AccountDeleteCommand command) {
+        if(!this.isActive) {
+            throw new RuntimeException("already account not exist!!");
+        }
+        apply(new AccountDeleteEvent(command.getId()));
     }
 
     @EventSourcingHandler
     public void on (AccountCreateEvent event) {
-        setByCreateEvent(event);
-    }
-
-    @EventSourcingHandler
-    public void on (AccountUpdateEvent event) {
-        log.info("event => {}", event);
-        final AccountMongoDocument accountDocument = new AccountMongoDocument(event);
-        log.info("accountDocument => {}", accountDocument);
-        updateEventApply(accountDocument);
-        log.info("accountAggregate => {}", this);
-    }
-
-    public void replay(AccountMongoDocument accountDocument) {
-        switch (accountDocument.getEventType()) {
-            case CREATE:
-                createEventApply(accountDocument);
-                break;
-            case UPDATE:
-                updateEventApply(accountDocument);
-                break;
-            case DELETE:
-                break;
-        }
-    }
-
-    private void updateEventApply(AccountMongoDocument accountDocument) {
-        AccountUpdateEvent accountUpdateEvent = (AccountUpdateEvent) accountDocument.getEvent();
-        accountDocument.getAggregateFieldList().forEach(item -> item.replay(this, accountUpdateEvent));
-    }
-
-    private void createEventApply(AccountMongoDocument accountDocument) {
-        setByCreateEvent((AccountCreateEvent) accountDocument.getEvent());
-        this.id = accountDocument.getId();
-    }
-
-    private void setByCreateEvent(AccountCreateEvent event) {
+        log.info("AccountAggregate AccountCreateEvent => {}", event);
         this.id = event.getId();
         this.userName = event.getUserName();
         this.password = event.getPassword();
@@ -148,9 +102,26 @@ public class AccountAggregate {
         this.profileUrl = event.getProfileUrl();
     }
 
+    @EventSourcingHandler
+    public void on (AccountUpdateEvent event) {
+        log.info("AccountAggregate AccountUpdateEvent => {}", event);
+        updateEventApply(event);
+    }
+
+    @EventSourcingHandler
+    public void on(AccountDeleteEvent accountDeleteEvent) {
+        this.isActive = false;
+    }
+
+    private void updateEventApply(AccountUpdateEvent accountUpdateEvent) {
+        accountUpdateEvent.getAccountAggregateFields().forEach(item -> item.replay(this, accountUpdateEvent));
+    }
+
     private Optional<AccountUpdateEvent> diff(AccountUpdateCommand command) {
         final List<AccountAggregateField> aggregateFieldList = new ArrayList<>();
-        final AccountUpdateEvent.AccountUpdateEventBuilder accountUpdateEventBuilder = AccountUpdateEvent.builder();
+        final AccountUpdateEvent.AccountUpdateEventBuilder accountUpdateEventBuilder = AccountUpdateEvent
+                .builder()
+                .id(command.getId());
         boolean diffFlag = false;
 
         if(Objects.nonNull(command.getUserName()) && !StringUtils.equals(this.userName, command.getUserName())) {
@@ -165,7 +136,7 @@ public class AccountAggregate {
         }
         if(Objects.nonNull(command.getNickname()) && !StringUtils.equals(this.nickname, command.getNickname())) {
             accountUpdateEventBuilder.nickname(command.getNickname());
-            aggregateFieldList.add(AccountAggregateField.NINK_NAME);
+            aggregateFieldList.add(AccountAggregateField.NICK_NAME);
             diffFlag = true;
         }
         if(this.isActive != command.isActive()) {
@@ -211,4 +182,31 @@ public class AccountAggregate {
         }
         return Optional.empty();
     }
+
+    //    public void replay(AccountMongoDocument accountDocument) {
+//        switch (accountDocument.getEventType()) {
+//            case CREATE:
+//                createEventApply(accountDocument);
+//                break;
+//            case UPDATE:
+//                updateEventApply(accountDocument);
+//                break;
+//            case DELETE:
+//                break;
+//        }
+//    }
+
+//    private void setByCreateEvent(AccountCreateEvent event) {
+//        this.id = event.getId();
+//        this.userName = event.getUserName();
+//        this.password = event.getPassword();
+//        this.nickname = event.getNickname();
+//        this.isActive = event.isActive();
+//        this.website = event.getWebsite();
+//        this.intro = event.getIntro();
+//        this.email = event.getEmail();
+//        this.telephone = event.getTelephone();
+//        this.gender = event.getGender();
+//        this.profileUrl = event.getProfileUrl();
+//    }
 }

@@ -1,7 +1,7 @@
 package com.msa.instagram.clone.account.enums;
 
 import com.msa.instagram.clone.account.aggregate.AccountAggregate;
-import com.msa.instagram.clone.account.event.update.AccountUpdateEvent;
+import com.msa.instagram.clone.account.event.AccountUpdateEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.util.Pair;
@@ -15,7 +15,7 @@ public enum AccountAggregateField {
 
     USER_NAME(accountUpdateEvent -> accountUpdateEvent.getUserName(), pair -> pair.getFirst().setUserName(String.valueOf(pair.getSecond()))),
     PASSWORD(accountUpdateEvent -> accountUpdateEvent.getPassword(), pair -> pair.getFirst().setPassword(String.valueOf(pair.getSecond()))),
-    NINK_NAME(accountUpdateEvent -> accountUpdateEvent.getNickname(), pair -> pair.getFirst().setNickname(String.valueOf(pair.getSecond()))),
+    NICK_NAME(accountUpdateEvent -> accountUpdateEvent.getNickname(), pair -> pair.getFirst().setNickname(String.valueOf(pair.getSecond()))),
     IS_ACTIVE(accountUpdateEvent -> accountUpdateEvent.isActive(), pair -> pair.getFirst().setActive((boolean) pair.getSecond())),
     WEB_SITE(accountUpdateEvent -> accountUpdateEvent.getWebsite(), pair -> pair.getFirst().setWebsite(String.valueOf(pair.getSecond()))),
     INTRO(accountUpdateEvent -> accountUpdateEvent.getIntro(), pair -> pair.getFirst().setIntro(String.valueOf(pair.getSecond()))),
