@@ -8,8 +8,6 @@ import com.msa.instagram.clone.social.comment.enums.CommentAggregateField;
 import com.msa.instagram.clone.social.comment.event.CommentCreateEvent;
 import com.msa.instagram.clone.social.comment.event.CommentDeleteEvent;
 import com.msa.instagram.clone.social.comment.event.CommentUpdateEvent;
-import com.msa.instagram.clone.social.post.enums.PostAggregateField;
-import com.msa.instagram.clone.social.post.event.PostUpdateEvent;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +15,6 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.axonframework.commandhandling.CommandHandler;
-import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 

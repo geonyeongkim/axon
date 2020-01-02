@@ -3,6 +3,7 @@ package com.msa.instagram.clone.common.configuration;
 import com.mongodb.MongoClient;
 import com.msa.instagram.clone.account.aggregate.AccountAggregate;
 import com.msa.instagram.clone.social.comment.aggregate.CommentAggregate;
+import com.msa.instagram.clone.social.like.aggregate.LikeAggregate;
 import com.msa.instagram.clone.social.post.aggregate.PostAggregate;
 import org.axonframework.eventsourcing.*;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
@@ -30,8 +31,8 @@ public class AxonConfig {
                 eventStore,
                 new GenericAggregateFactory<>(AccountAggregate.class),
                 new GenericAggregateFactory<>(PostAggregate.class),
-                new GenericAggregateFactory<>(CommentAggregate.class)
-//                new GenericAggregateFactory<>(CommentAggregate.class)
+                new GenericAggregateFactory<>(CommentAggregate.class),
+                new GenericAggregateFactory<>(LikeAggregate.class)
         );
     }
 

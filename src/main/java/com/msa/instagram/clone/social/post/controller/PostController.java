@@ -24,14 +24,14 @@ public class PostController {
         postService.create(command);
     }
 
-    @PostMapping(value = "update")
+    @PutMapping(value = "update")
     public void update(@RequestBody PostUpdateRequest postUpdateRequest) {
         final PostUpdateCommand command = new PostUpdateCommand(postUpdateRequest);
         postService.update(command);
 
     }
 
-    @GetMapping(value = "delete/{id}")
+    @DeleteMapping(value = "delete/{id}")
     public void delete(@PathVariable String id) {
         postService.delete(new PostDeleteCommand(id));
     }

@@ -24,13 +24,13 @@ public class CommentController {
         commentService.create(command);
     }
 
-    @PostMapping(value = "update")
+    @PutMapping(value = "update")
     public void update(@RequestBody CommentUpdateRequest commentUpdateRequest) {
         final CommentUpdateCommand command = new CommentUpdateCommand(commentUpdateRequest);
         commentService.update(command);
     }
 
-    @GetMapping(value = "delete/{id}")
+    @DeleteMapping(value = "delete/{id}")
     public void delete(@PathVariable String id) {
         commentService.delete(new CommentDeleteCommand(id));
     }

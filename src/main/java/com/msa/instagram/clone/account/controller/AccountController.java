@@ -28,14 +28,14 @@ public class AccountController {
 
     }
 
-    @PostMapping(value = "update")
+    @PutMapping(value = "update")
     public void update(@RequestBody AccountUpdateRequest accountUpdateRequest) {
         final AccountUpdateCommand command = new AccountUpdateCommand(accountUpdateRequest);
         accountService.update(command);
 
     }
 
-    @GetMapping(value = "delete/{id}")
+    @DeleteMapping(value = "delete/{id}")
     public void delete(@PathVariable String id) {
         accountService.delete(new AccountDeleteCommand(id));
     }
