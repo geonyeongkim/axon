@@ -8,6 +8,7 @@ import com.msa.instagram.clone.account.enums.Gender;
 import com.msa.instagram.clone.account.event.AccountCreateEvent;
 import com.msa.instagram.clone.account.event.AccountDeleteEvent;
 import com.msa.instagram.clone.account.event.AccountUpdateEvent;
+import com.msa.instagram.clone.common.aggregate.CommonAggregate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,12 +36,9 @@ import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 @Slf4j
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Aggregate(repository = "accountAggregateEventSourcingRepository")
+@Aggregate(repository = "aggregateEventSourcingRepository")
 @Setter
-public class AccountAggregate {
-
-    @AggregateIdentifier
-    private String id;
+public class AccountAggregate extends CommonAggregate<AccountUpdateEvent, AccountUpdateCommand> {
 
     private String userName;
     private String password;
@@ -103,7 +101,7 @@ public class AccountAggregate {
     @EventSourcingHandler
     public void on (AccountUpdateEvent event) {
         log.info("AccountAggregate AccountUpdateEvent => {}", event);
-        event.getAccountAggregateFields().forEach(item -> item.updateAccountAggreate(this, event));
+        event.getAccountAggregateFields().forEach(item -> item.updateAggregate(this, event));
     }
 
     @EventSourcingHandler
@@ -111,7 +109,7 @@ public class AccountAggregate {
         this.isActive = false;
     }
 
-    private Optional<AccountUpdateEvent> diff(AccountUpdateCommand command) {
+    protected  Optional<AccountUpdateEvent> diff(AccountUpdateCommand command) {
         final List<AccountAggregateField> aggregateFieldList = new ArrayList<>();
         final AccountUpdateEvent.AccountUpdateEventBuilder accountUpdateEventBuilder = AccountUpdateEvent
                 .builder()

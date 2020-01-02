@@ -2,6 +2,8 @@ package com.msa.instagram.clone.common.configuration;
 
 import com.mongodb.MongoClient;
 import com.msa.instagram.clone.account.aggregate.AccountAggregate;
+import com.msa.instagram.clone.social.comment.aggregate.CommentAggregate;
+import com.msa.instagram.clone.social.post.aggregate.PostAggregate;
 import org.axonframework.eventsourcing.*;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.eventsourcing.eventstore.EventStore;
@@ -24,7 +26,13 @@ public class AxonConfig {
 
     @Bean
     public Snapshotter snapShotter(EventStore eventStore){
-        return new AggregateSnapshotter(eventStore, new GenericAggregateFactory<>(AccountAggregate.class));
+        return new AggregateSnapshotter(
+                eventStore,
+                new GenericAggregateFactory<>(AccountAggregate.class),
+                new GenericAggregateFactory<>(PostAggregate.class),
+                new GenericAggregateFactory<>(CommentAggregate.class)
+//                new GenericAggregateFactory<>(CommentAggregate.class)
+        );
     }
 
     @Bean
@@ -33,7 +41,7 @@ public class AxonConfig {
     }
 
     @Bean
-    public EventSourcingRepository<AccountAggregate> accountAggregateEventSourcingRepository(EventStore eventStore, SnapshotTriggerDefinition snapshotTriggerDefinition) {
+    public EventSourcingRepository<AccountAggregate> aggregateEventSourcingRepository(EventStore eventStore, SnapshotTriggerDefinition snapshotTriggerDefinition) {
         return new EventSourcingRepository<>(AccountAggregate.class, eventStore, snapshotTriggerDefinition);
     }
 }

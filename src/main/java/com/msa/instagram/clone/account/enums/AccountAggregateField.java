@@ -2,16 +2,18 @@ package com.msa.instagram.clone.account.enums;
 
 import com.msa.instagram.clone.account.aggregate.AccountAggregate;
 import com.msa.instagram.clone.account.event.AccountUpdateEvent;
+import com.msa.instagram.clone.common.support.AggregateField;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 @Getter
-@AllArgsConstructor
-public enum AccountAggregateField {
+@RequiredArgsConstructor
+public enum AccountAggregateField implements AggregateField<AccountAggregate, AccountUpdateEvent> {
 
     USER_NAME(accountUpdateEvent -> accountUpdateEvent.getUserName(), pair -> pair.getFirst().setUserName(String.valueOf(pair.getSecond()))),
     PASSWORD(accountUpdateEvent -> accountUpdateEvent.getPassword(), pair -> pair.getFirst().setPassword(String.valueOf(pair.getSecond()))),
@@ -24,10 +26,11 @@ public enum AccountAggregateField {
     PROFILE_URL(accountUpdateEvent -> accountUpdateEvent.getProfileUrl(), pair -> pair.getFirst().setProfileUrl(String.valueOf(pair.getSecond())))
     ;
 
-    private Function<AccountUpdateEvent, Object> getExpress;
-    private Consumer<Pair<AccountAggregate, Object>> setExpress;
+    private final Function<AccountUpdateEvent, Object> getExpress;
+    private final Consumer<Pair<AccountAggregate, Object>> setExpress;
 
-    public void updateAccountAggreate(AccountAggregate accountAggregate, AccountUpdateEvent accountUpdateEvent) {
-        setExpress.accept(Pair.of(accountAggregate, getExpress.apply(accountUpdateEvent)));
+    @Override
+    public void updateAggregate(AccountAggregate aggregate, AccountUpdateEvent event) {
+        setExpress.accept(Pair.of(aggregate, getExpress.apply(event)));
     }
 }

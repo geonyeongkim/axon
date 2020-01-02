@@ -1,7 +1,6 @@
 package com.msa.instagram.clone.social.post.aggregate;
 
-import com.msa.instagram.clone.account.enums.AccountAggregateField;
-import com.msa.instagram.clone.account.event.AccountUpdateEvent;
+import com.msa.instagram.clone.common.aggregate.CommonAggregate;
 import com.msa.instagram.clone.social.post.command.PostCreateCommand;
 import com.msa.instagram.clone.social.post.command.PostDeleteCommand;
 import com.msa.instagram.clone.social.post.command.PostUpdateCommand;
@@ -17,26 +16,22 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.axonframework.commandhandling.CommandHandler;
-import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
-
-import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
+
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Setter
-@Aggregate
-public class PostAggregate {
-
-    @AggregateIdentifier
-    private String id;
+@Aggregate(repository = "aggregateEventSourcingRepository")
+public class PostAggregate extends CommonAggregate<PostUpdateEvent, PostUpdateCommand> {
 
     private String authorId;
     private String content;
@@ -85,7 +80,7 @@ public class PostAggregate {
 
     @EventSourcingHandler
     public void on(PostUpdateEvent event) {
-        event.getPostAggregateFieldList().forEach(item -> item.updatePostAggregate(this, event));
+        event.getPostAggregateFieldList().forEach(item -> item.updateAggregate(this, event));
     }
 
     @EventSourcingHandler
@@ -93,7 +88,7 @@ public class PostAggregate {
         this.isActive = false;
     }
 
-    private Optional<PostUpdateEvent> diff(PostUpdateCommand command) {
+    protected Optional<PostUpdateEvent> diff(PostUpdateCommand command) {
         final List<PostAggregateField> aggregateFields = new ArrayList<>();
         final PostUpdateEvent.PostUpdateEventBuilder postUpdateEventBuilder = PostUpdateEvent
                 .builder()

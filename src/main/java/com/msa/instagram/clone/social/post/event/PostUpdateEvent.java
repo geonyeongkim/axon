@@ -1,5 +1,6 @@
 package com.msa.instagram.clone.social.post.event;
 
+import com.msa.instagram.clone.common.support.AggregateField;
 import com.msa.instagram.clone.social.post.enums.PostAggregateField;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class PostUpdateEvent {
     private String id;
     private String content;
     private long updateTimestamp;
-    private List<PostAggregateField> postAggregateFieldList;
+    private List<? extends AggregateField> postAggregateFieldList;
 
     @Builder
     public PostUpdateEvent(String id, String content, long updateTimestamp, List<PostAggregateField> postAggregateFieldList) {
