@@ -1,8 +1,13 @@
 package com.msa.instagram.clone.social.like.event;
 
-import lombok.NoArgsConstructor;
+import com.msa.instagram.clone.social.like.enums.LikeType;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-
-@NoArgsConstructor
+@Getter
+@RequiredArgsConstructor
 public class UnLikeEvent {
+    private final String id;
+    private final String targetId;
+    private final LikeType likeType;
 }

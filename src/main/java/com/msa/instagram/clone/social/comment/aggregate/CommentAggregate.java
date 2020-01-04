@@ -41,6 +41,7 @@ public class CommentAggregate extends CommonAggregate<CommentUpdateEvent, Commen
 
     @CommandHandler
     public CommentAggregate(CommentCreateCommand command) {
+        log.info("CommentCreateCommand => {}", command);
         if(this.isActive) {
             throw new RuntimeException("already comment exist!!");
         }
@@ -61,7 +62,7 @@ public class CommentAggregate extends CommonAggregate<CommentUpdateEvent, Commen
         if(!this.isActive) {
             throw new RuntimeException("already comment not exist!!");
         }
-        apply(new CommentDeleteEvent(command.getId()));
+        apply(new CommentDeleteEvent(command.getId(), this.postId));
     }
 
     @EventSourcingHandler
@@ -89,7 +90,8 @@ public class CommentAggregate extends CommonAggregate<CommentUpdateEvent, Commen
         final List<CommentAggregateField> aggregateFields = new ArrayList<>();
         final CommentUpdateEvent.CommentUpdateEventBuilder commentUpdateEventBuilder = CommentUpdateEvent
                 .builder()
-                .id(command.getId());
+                .id(command.getId())
+                .postId(this.postId);
         boolean diffFlag = false;
 
         if (Objects.nonNull(command.getContent()) && !StringUtils.equals(this.content, command.getContent())) {

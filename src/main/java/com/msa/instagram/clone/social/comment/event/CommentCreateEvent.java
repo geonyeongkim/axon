@@ -6,11 +6,9 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class CommentCreateEvent {
+public class CommentCreateEvent extends CommentEvent {
 
-    private String id;
     private String authorId;
-    private String postId;
     private String content;
     private boolean isActive;
     private long timestamp;

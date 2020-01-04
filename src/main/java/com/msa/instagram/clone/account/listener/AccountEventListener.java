@@ -6,6 +6,7 @@ import com.msa.instagram.clone.account.event.AccountDeleteEvent;
 import com.msa.instagram.clone.account.event.AccountUpdateEvent;
 import com.msa.instagram.clone.account.model.document.AccountEsDocument;
 import com.msa.instagram.clone.account.repository.AccountEsRepository;
+import com.msa.instagram.clone.common.EventListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.eventhandling.EventHandler;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class AccountEventListener {
+public class AccountEventListener extends EventListener {
 
     private final AccountEsRepository accountEsRepository;
     private final ElasticsearchTemplate elasticsearchTemplate;
@@ -35,7 +36,6 @@ public class AccountEventListener {
 
     @EventHandler
     public void handle(AccountUpdateEvent event) {
-        final IndexRequest indexRequest = new IndexRequest();
         final Map updateMap = event.getAccountAggregateFields()
                 .stream()
                 .collect(
@@ -44,19 +44,15 @@ public class AccountEventListener {
                                 item -> item.getGetExpress().apply(event)
                         )
                 );
-        indexRequest.source(updateMap);
-        final UpdateQuery updateQuery = new UpdateQueryBuilder().withId(event.getId()).withClass(AccountEsDocument.class).withIndexRequest(indexRequest).build();
+
+        final UpdateQuery updateQuery = makeUpdateQuery(event.getId(), updateMap, AccountEsDocument.class);
         elasticsearchTemplate.update(updateQuery);
     }
 
     @EventHandler
     public void handle(AccountDeleteEvent event) {
-        elasticsearchTemplate.update(makeUpdateQuery(event.getId(), new HashMap(){{put(AccountEsField.getIsActiveFieldName(), false);}}));
-    }
-
-    private UpdateQuery makeUpdateQuery(String id, Map map) {
-        final IndexRequest indexRequest = new IndexRequest();
-        indexRequest.source(map);
-        return new UpdateQueryBuilder().withId(id).withClass(AccountEsDocument.class).withIndexRequest(indexRequest).build();
+        elasticsearchTemplate.update(makeUpdateQuery(event.getId(), new HashMap() {{
+            put(AccountEsField.getIsActiveFieldName(), false);
+        }}, AccountEsDocument.class));
     }
 }

@@ -52,6 +52,7 @@ public class PostAggregate extends CommonAggregate<PostUpdateEvent, PostUpdateCo
 
     @CommandHandler
     public void handle(PostUpdateCommand command) {
+        log.info("PostUpdateCommand => {}", command);
         final Optional<PostUpdateEvent> postUpdateEventOptional = diff(command);
         if(!postUpdateEventOptional.isPresent()) {
             throw new RuntimeException("not chnage!!");
@@ -82,6 +83,7 @@ public class PostAggregate extends CommonAggregate<PostUpdateEvent, PostUpdateCo
 
     @EventSourcingHandler
     public void on(PostUpdateEvent event) {
+        log.info("PostUpdateEvent => {}", event);
         event.getPostAggregateFieldList().forEach(item -> item.updateAggregate(this, event));
     }
 

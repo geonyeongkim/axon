@@ -1,5 +1,7 @@
 package com.msa.instagram.clone.common.support;
 
-public interface AggregateField<A, E> {
+import com.msa.instagram.clone.common.event.UpdateEvent;
+
+public interface AggregateField<A, E extends UpdateEvent> {
     void updateAggregate(A aggregate, E event);
 }

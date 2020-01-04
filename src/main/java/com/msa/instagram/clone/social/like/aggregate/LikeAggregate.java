@@ -3,6 +3,7 @@ package com.msa.instagram.clone.social.like.aggregate;
 import com.msa.instagram.clone.social.like.command.CommentLikeCommand;
 import com.msa.instagram.clone.social.like.command.PostLikeCommand;
 import com.msa.instagram.clone.social.like.command.UnLikeCommand;
+import com.msa.instagram.clone.social.like.enums.LikeType;
 import com.msa.instagram.clone.social.like.event.CommentLikeEvent;
 import com.msa.instagram.clone.social.like.event.PostLikeEvent;
 import com.msa.instagram.clone.social.like.event.UnLikeEvent;
@@ -15,6 +16,9 @@ import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
+
+import java.util.Objects;
+
 import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 
 @Slf4j
@@ -26,9 +30,11 @@ public class LikeAggregate {
 
     @AggregateIdentifier
     private String id;
+
     private String authorId;
     private String postId;
     private String commentId;
+    private boolean isActive;
 
     @CommandHandler
     public LikeAggregate(PostLikeCommand command) {
@@ -42,7 +48,12 @@ public class LikeAggregate {
 
     @CommandHandler
     public void handle(UnLikeCommand command) {
-        apply(new UnLikeEvent());
+        apply(new UnLikeEvent(
+                command.getId(),
+                Objects.nonNull(this.postId) ? postId : commentId,
+                Objects.nonNull(this.postId) ? LikeType.POST: LikeType.COMMENT
+)
+        );
     }
 
     @EventSourcingHandler
@@ -61,6 +72,6 @@ public class LikeAggregate {
 
     @EventSourcingHandler
     public void on(UnLikeEvent event) {
-        this.id = null;
+        this.isActive = false;
     }
 }

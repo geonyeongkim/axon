@@ -16,7 +16,7 @@ public class PostUpdateEvent implements UpdateEvent {
     private String id;
     private String content;
     private long updateTimestamp;
-    private List<? extends AggregateField> postAggregateFieldList;
+    private List<PostAggregateField> postAggregateFieldList;
 
     @Builder
     public PostUpdateEvent(String id, String content, long updateTimestamp, List<PostAggregateField> postAggregateFieldList) {

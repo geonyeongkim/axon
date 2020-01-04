@@ -11,15 +11,15 @@ import java.util.List;
 
 @Getter
 @ToString
-public class CommentUpdateEvent implements UpdateEvent {
+public class CommentUpdateEvent extends CommentEvent implements UpdateEvent {
 
-    private String id;
     private String content;
-    private List<? extends AggregateField> commentAggregateFields;
+    private List<CommentAggregateField> commentAggregateFields;
 
     @Builder
-    public CommentUpdateEvent(String id, String content, List<CommentAggregateField> commentAggregateFields) {
+    public CommentUpdateEvent(String id, String postId, String content, List<CommentAggregateField> commentAggregateFields) {
         this.id = id;
+        this.postId = postId;
         this.content = content;
         this.commentAggregateFields = commentAggregateFields;
     }
