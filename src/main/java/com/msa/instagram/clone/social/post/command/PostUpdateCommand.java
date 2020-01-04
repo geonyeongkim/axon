@@ -1,16 +1,14 @@
 package com.msa.instagram.clone.social.post.command;
 
-import com.msa.instagram.clone.social.post.model.vo.Media;
+import com.msa.instagram.clone.common.command.UpdateCommand;
 import com.msa.instagram.clone.social.post.model.vo.PostUpdateRequest;
 import lombok.Getter;
 import lombok.ToString;
 import org.axonframework.commandhandling.TargetAggregateIdentifier;
 
-import java.util.List;
-
 @Getter
 @ToString
-public class PostUpdateCommand {
+public class PostUpdateCommand implements UpdateCommand {
 
     @TargetAggregateIdentifier
     private String id;

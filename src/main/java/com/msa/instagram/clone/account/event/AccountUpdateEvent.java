@@ -2,6 +2,7 @@ package com.msa.instagram.clone.account.event;
 
 import com.msa.instagram.clone.account.enums.AccountAggregateField;
 import com.msa.instagram.clone.account.enums.Gender;
+import com.msa.instagram.clone.common.event.UpdateEvent;
 import com.msa.instagram.clone.common.support.AggregateField;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @ToString
-public class AccountUpdateEvent {
+public class AccountUpdateEvent implements UpdateEvent {
 
     private String id;
     private String userName;
@@ -29,7 +30,7 @@ public class AccountUpdateEvent {
     private Gender gender;
     private String profileUrl;
     private long timestamp;
-    private List<? extends AggregateField> accountAggregateFields;
+    private List<AccountAggregateField> accountAggregateFields;
 
     @Builder
     public AccountUpdateEvent(String id, String userName, String password, String nickname, String website, String intro, String email, String telephone, Gender gender, String profileUrl, long timestamp, List<AccountAggregateField> accountAggregateFields) {

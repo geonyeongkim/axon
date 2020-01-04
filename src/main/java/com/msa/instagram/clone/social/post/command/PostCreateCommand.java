@@ -12,6 +12,7 @@ import java.util.UUID;
 @Getter
 @ToString
 public class PostCreateCommand {
+
     @TargetAggregateIdentifier
     private String id;
 

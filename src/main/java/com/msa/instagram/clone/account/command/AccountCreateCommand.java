@@ -1,6 +1,5 @@
 package com.msa.instagram.clone.account.command;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.msa.instagram.clone.account.enums.Gender;
 import com.msa.instagram.clone.account.model.vo.AccountCreateRequest;
 import lombok.Getter;

@@ -16,6 +16,7 @@ public class PostService {
     private final CommandGateway commandGateway;
 
     public void create(PostCreateCommand command) {
+        log.info("PostCreateCommand => {}", command);
         commandGateway.sendAndWait(command);
     }
 

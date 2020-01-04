@@ -1,5 +1,6 @@
 package com.msa.instagram.clone.social.comment.event;
 
+import com.msa.instagram.clone.common.event.UpdateEvent;
 import com.msa.instagram.clone.common.support.AggregateField;
 import com.msa.instagram.clone.social.comment.enums.CommentAggregateField;
 import lombok.Builder;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Getter
 @ToString
-public class CommentUpdateEvent {
+public class CommentUpdateEvent implements UpdateEvent {
 
     private String id;
     private String content;

@@ -21,7 +21,7 @@ import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Aggregate(repository = "aggregateEventSourcingRepository")
+@Aggregate(repository = "likeAggregateEventSourcingRepository")
 public class LikeAggregate {
 
     @AggregateIdentifier

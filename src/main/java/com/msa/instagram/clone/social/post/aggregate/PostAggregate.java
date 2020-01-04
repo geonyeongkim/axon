@@ -9,13 +9,11 @@ import com.msa.instagram.clone.social.post.event.PostCreateEvent;
 import com.msa.instagram.clone.social.post.event.PostDeleteEvent;
 import com.msa.instagram.clone.social.post.event.PostUpdateEvent;
 import com.msa.instagram.clone.social.post.model.vo.Media;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.axonframework.commandhandling.CommandHandler;
+import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 
@@ -29,8 +27,8 @@ import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-@Setter
-@Aggregate(repository = "aggregateEventSourcingRepository")
+@Aggregate(repository = "postAggregateEventSourcingRepository")
+@Getter @Setter
 public class PostAggregate extends CommonAggregate<PostUpdateEvent, PostUpdateCommand> {
 
     private String authorId;
@@ -42,11 +40,14 @@ public class PostAggregate extends CommonAggregate<PostUpdateEvent, PostUpdateCo
 
     @CommandHandler
     public PostAggregate(PostCreateCommand command) {
+        log.info("PostCreateCommand => {}", command);
         // TODO: media 업로드
         if (this.isActive) {
             throw new RuntimeException("already post exist!!");
         }
-        apply(new PostCreateEvent(command));
+        PostCreateEvent postCreateEvent = new PostCreateEvent(command);
+        log.info("postCreateEvent => {}", postCreateEvent);
+        apply(postCreateEvent);
     }
 
     @CommandHandler
@@ -69,7 +70,8 @@ public class PostAggregate extends CommonAggregate<PostUpdateEvent, PostUpdateCo
 
     @EventSourcingHandler
     public void on(PostCreateEvent event) {
-        this.id = event.getId();
+        log.info("PostCreateEvent => {}", event);
+        this.setId(event.getId());
         this.authorId = event.getAuthorId();
         this.content = event.getContent();
         this.mediaList = event.getMediaList();

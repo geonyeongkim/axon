@@ -9,15 +9,11 @@ import com.msa.instagram.clone.account.event.AccountCreateEvent;
 import com.msa.instagram.clone.account.event.AccountDeleteEvent;
 import com.msa.instagram.clone.account.event.AccountUpdateEvent;
 import com.msa.instagram.clone.common.aggregate.CommonAggregate;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.model.AggregateIdentifier;
-import org.axonframework.commandhandling.model.AggregateVersion;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 
@@ -36,8 +32,8 @@ import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 @Slf4j
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Aggregate(repository = "aggregateEventSourcingRepository")
-@Setter
+@Aggregate(repository = "accountAggregateEventSourcingRepository")
+@Getter @Setter
 public class AccountAggregate extends CommonAggregate<AccountUpdateEvent, AccountUpdateCommand> {
 
     private String userName;
@@ -85,7 +81,7 @@ public class AccountAggregate extends CommonAggregate<AccountUpdateEvent, Accoun
     @EventSourcingHandler
     public void on (AccountCreateEvent event) {
         log.info("AccountAggregate AccountCreateEvent => {}", event);
-        this.id = event.getId();
+        this.setId(event.getId());
         this.userName = event.getUserName();
         this.password = event.getPassword();
         this.nickname = event.getNickname();
@@ -109,7 +105,7 @@ public class AccountAggregate extends CommonAggregate<AccountUpdateEvent, Accoun
         this.isActive = false;
     }
 
-    protected  Optional<AccountUpdateEvent> diff(AccountUpdateCommand command) {
+    protected Optional<AccountUpdateEvent> diff(AccountUpdateCommand command) {
         final List<AccountAggregateField> aggregateFieldList = new ArrayList<>();
         final AccountUpdateEvent.AccountUpdateEventBuilder accountUpdateEventBuilder = AccountUpdateEvent
                 .builder()

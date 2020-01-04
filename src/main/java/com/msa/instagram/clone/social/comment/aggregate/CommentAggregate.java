@@ -15,6 +15,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.axonframework.commandhandling.CommandHandler;
+import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 
@@ -29,7 +30,7 @@ import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Aggregate(repository = "aggregateEventSourcingRepository")
+@Aggregate(repository = "commentAggregateEventSourcingRepository")
 public class CommentAggregate extends CommonAggregate<CommentUpdateEvent, CommentUpdateCommand> {
 
     private String authorId;
@@ -65,7 +66,7 @@ public class CommentAggregate extends CommonAggregate<CommentUpdateEvent, Commen
 
     @EventSourcingHandler
     public void on(CommentCreateEvent event) {
-        this.id = event.getId();
+        this.setId(event.getId());
         this.authorId = event.getAuthorId();
         this.postId = event.getPostId();
         this.content = event.getContent();

@@ -33,7 +33,7 @@ public class AccountEsDocument {
     private Gender gender;
     private String profileUrl;
     private List<String> followerIdList = new ArrayList<>();
-    private List<String> followingIdList = new ArrayList<>();;
+    private List<String> followingIdList = new ArrayList<>();
 
     public AccountEsDocument(AccountCreateEvent event) {
         this.id = event.getId();

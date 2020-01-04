@@ -2,6 +2,7 @@ package com.msa.instagram.clone.account.command;
 
 import com.msa.instagram.clone.account.enums.Gender;
 import com.msa.instagram.clone.account.model.vo.AccountUpdateRequest;
+import com.msa.instagram.clone.common.command.UpdateCommand;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -13,7 +14,7 @@ import org.axonframework.commandhandling.TargetAggregateIdentifier;
 @Getter
 @ToString
 @NoArgsConstructor
-public class AccountUpdateCommand {
+public class AccountUpdateCommand implements UpdateCommand {
 
     @TargetAggregateIdentifier
     private String id;
