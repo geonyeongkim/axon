@@ -18,20 +18,20 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping(value = "create")
+    @PostMapping
     public void create(@RequestBody PostCreateRequest postCreateRequest) {
         final PostCreateCommand command = new PostCreateCommand(postCreateRequest);
         postService.create(command);
     }
 
-    @PutMapping(value = "update")
+    @PutMapping
     public void update(@RequestBody PostUpdateRequest postUpdateRequest) {
         final PostUpdateCommand command = new PostUpdateCommand(postUpdateRequest);
         postService.update(command);
 
     }
 
-    @DeleteMapping(value = "delete/{id}")
+    @DeleteMapping(value = "{id}")
     public void delete(@PathVariable String id) {
         postService.delete(new PostDeleteCommand(id));
     }

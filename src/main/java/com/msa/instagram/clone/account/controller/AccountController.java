@@ -21,21 +21,21 @@ public class AccountController {
 
     private final AccountService accountService;
 
-    @PostMapping(value = "create")
+    @PostMapping
     public void create(@RequestBody AccountCreateRequest accountCreateRequest) {
         final AccountCreateCommand command = new AccountCreateCommand(accountCreateRequest);
         accountService.create(command);
 
     }
 
-    @PutMapping(value = "update")
+    @PutMapping
     public void update(@RequestBody AccountUpdateRequest accountUpdateRequest) {
         final AccountUpdateCommand command = new AccountUpdateCommand(accountUpdateRequest);
         accountService.update(command);
 
     }
 
-    @DeleteMapping(value = "delete/{id}")
+    @DeleteMapping(value = "{id}")
     public void delete(@PathVariable String id) {
         accountService.delete(new AccountDeleteCommand(id));
     }

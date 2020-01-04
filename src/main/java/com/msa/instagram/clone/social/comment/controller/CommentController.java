@@ -18,19 +18,19 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping(value = "create")
+    @PostMapping
     public void create(@RequestBody CommentCreateRequest commentCreateRequest) {
         final CommentCreateCommand command = new CommentCreateCommand(commentCreateRequest);
         commentService.create(command);
     }
 
-    @PutMapping(value = "update")
+    @PutMapping
     public void update(@RequestBody CommentUpdateRequest commentUpdateRequest) {
         final CommentUpdateCommand command = new CommentUpdateCommand(commentUpdateRequest);
         commentService.update(command);
     }
 
-    @DeleteMapping(value = "delete/{id}")
+    @DeleteMapping(value = "{id}")
     public void delete(@PathVariable String id) {
         commentService.delete(new CommentDeleteCommand(id));
     }
