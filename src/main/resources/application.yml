@@ -14,3 +14,5 @@ spring:
     mongodb:
       host: dev-geon-mongo-ncl.nfra.io
       port: 27017
+server:
+  port: 9090

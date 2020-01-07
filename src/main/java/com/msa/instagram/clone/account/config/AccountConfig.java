@@ -15,10 +15,10 @@ public class AccountConfig {
 
     @Bean
     public Snapshotter accountSnapShotter(EventStore eventStore){
-        return new AggregateSnapshotter(
-                eventStore,
-                new GenericAggregateFactory<>(AccountAggregate.class)
-        );
+        return AggregateSnapshotter.builder()
+                .eventStore(eventStore)
+                .aggregateFactories(new GenericAggregateFactory<>(AccountAggregate.class))
+                .build();
     }
 
     @Bean
@@ -28,6 +28,6 @@ public class AccountConfig {
 
     @Bean
     public EventSourcingRepository<AccountAggregate> accountAggregateEventSourcingRepository(EventStore eventStore, SnapshotTriggerDefinition accountSnapshotTriggerDefinition) {
-        return new EventSourcingRepository<>(AccountAggregate.class, eventStore, accountSnapshotTriggerDefinition);
+        return EventSourcingRepository.builder(AccountAggregate.class).eventStore(eventStore).snapshotTriggerDefinition(accountSnapshotTriggerDefinition).build();
     }
 }

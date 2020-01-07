@@ -4,7 +4,7 @@ import com.msa.instagram.clone.common.command.UpdateCommand;
 import com.msa.instagram.clone.social.post.model.vo.PostUpdateRequest;
 import lombok.Getter;
 import lombok.ToString;
-import org.axonframework.commandhandling.TargetAggregateIdentifier;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 @Getter
 @ToString

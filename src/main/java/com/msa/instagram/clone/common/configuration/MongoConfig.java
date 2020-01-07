@@ -2,9 +2,6 @@ package com.msa.instagram.clone.common.configuration;
 
 
 import com.mongodb.MongoClient;
-import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
-import org.axonframework.mongo.DefaultMongoTemplate;
-import org.axonframework.mongo.eventsourcing.eventstore.MongoEventStorageEngine;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

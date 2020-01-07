@@ -4,9 +4,9 @@ import com.msa.instagram.clone.account.enums.Gender;
 import com.msa.instagram.clone.account.model.vo.AccountCreateRequest;
 import lombok.Getter;
 import lombok.ToString;
-import org.axonframework.commandhandling.TargetAggregateIdentifier;
 
 import java.util.UUID;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 @Getter
 @ToString

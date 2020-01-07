@@ -2,12 +2,11 @@ package com.msa.instagram.clone.social.post.command;
 
 import com.msa.instagram.clone.social.post.model.vo.Media;
 import com.msa.instagram.clone.social.post.model.vo.PostCreateRequest;
-import lombok.Getter;
-import lombok.ToString;
-import org.axonframework.commandhandling.TargetAggregateIdentifier;
-
 import java.util.List;
 import java.util.UUID;
+import lombok.Getter;
+import lombok.ToString;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 @Getter
 @ToString

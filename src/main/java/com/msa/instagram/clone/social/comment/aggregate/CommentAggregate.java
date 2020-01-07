@@ -1,5 +1,7 @@
 package com.msa.instagram.clone.social.comment.aggregate;
 
+import static org.axonframework.modelling.command.AggregateLifecycle.apply;
+
 import com.msa.instagram.clone.common.aggregate.CommonAggregate;
 import com.msa.instagram.clone.social.comment.command.CommentCreateCommand;
 import com.msa.instagram.clone.social.comment.command.CommentDeleteCommand;
@@ -8,6 +10,10 @@ import com.msa.instagram.clone.social.comment.enums.CommentAggregateField;
 import com.msa.instagram.clone.social.comment.event.CommentCreateEvent;
 import com.msa.instagram.clone.social.comment.event.CommentDeleteEvent;
 import com.msa.instagram.clone.social.comment.event.CommentUpdateEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,16 +21,8 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.axonframework.commandhandling.CommandHandler;
-import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 
 @Slf4j
 @Setter

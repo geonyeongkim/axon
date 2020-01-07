@@ -14,10 +14,11 @@ public class LikeConfig {
 
     @Bean
     public Snapshotter likeSnapShotter(EventStore eventStore) {
-        return new AggregateSnapshotter(
-                eventStore,
-                new GenericAggregateFactory<>(LikeAggregate.class)
-        );
+        return AggregateSnapshotter
+                .builder()
+                .eventStore(eventStore)
+                .aggregateFactories(new GenericAggregateFactory<>(LikeAggregate.class))
+                .build();
     }
 
     @Bean
@@ -27,6 +28,6 @@ public class LikeConfig {
 
     @Bean
     public EventSourcingRepository<LikeAggregate> likeAggregateEventSourcingRepository(EventStore eventStore, SnapshotTriggerDefinition likeSnapshotTriggerDefinition) {
-        return new EventSourcingRepository<>(LikeAggregate.class, eventStore, likeSnapshotTriggerDefinition);
+        return EventSourcingRepository.builder(LikeAggregate.class).eventStore(eventStore).snapshotTriggerDefinition(likeSnapshotTriggerDefinition).build();
     }
 }

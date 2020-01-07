@@ -14,10 +14,11 @@ public class CommentConfig {
 
     @Bean
     public Snapshotter commentSnapShotter(EventStore eventStore) {
-        return new AggregateSnapshotter(
-                eventStore,
-                new GenericAggregateFactory<>(CommentAggregate.class)
-        );
+        return AggregateSnapshotter
+                .builder()
+                .eventStore(eventStore)
+                .aggregateFactories(new GenericAggregateFactory<>(CommentAggregate.class))
+                .build();
     }
 
     @Bean
@@ -27,6 +28,6 @@ public class CommentConfig {
 
     @Bean
     public EventSourcingRepository<CommentAggregate> commentAggregateEventSourcingRepository(EventStore eventStore, SnapshotTriggerDefinition commentSnapshotTriggerDefinition) {
-        return new EventSourcingRepository<>(CommentAggregate.class, eventStore, commentSnapshotTriggerDefinition);
+        return EventSourcingRepository.builder(CommentAggregate.class).eventStore(eventStore).snapshotTriggerDefinition(commentSnapshotTriggerDefinition).build();
     }
 }

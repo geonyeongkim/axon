@@ -1,5 +1,7 @@
 package com.msa.instagram.clone.account.aggregate;
 
+import static org.axonframework.modelling.command.AggregateLifecycle.apply;
+
 import com.msa.instagram.clone.account.command.AccountCreateCommand;
 import com.msa.instagram.clone.account.command.AccountDeleteCommand;
 import com.msa.instagram.clone.account.command.AccountUpdateCommand;
@@ -13,7 +15,6 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.axonframework.commandhandling.CommandHandler;
-import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
+
 
 
 
@@ -72,9 +73,9 @@ public class AccountAggregate extends CommonAggregate<AccountUpdateEvent, Accoun
 
     @CommandHandler
     public void handle(AccountDeleteCommand command) {
-        if(!this.isActive) {
-            throw new RuntimeException("already account not exist!!");
-        }
+//        if(!this.isActive) {
+//            throw new RuntimeException("already account not exist!!");
+//        }
         apply(new AccountDeleteEvent(command.getId()));
     }
 
@@ -96,7 +97,6 @@ public class AccountAggregate extends CommonAggregate<AccountUpdateEvent, Accoun
 
     @EventSourcingHandler
     public void on (AccountUpdateEvent event) {
-        log.info("AccountAggregate AccountUpdateEvent => {}", event);
         event.getAccountAggregateFields().forEach(item -> item.updateAggregate(this, event));
     }
 
@@ -165,31 +165,4 @@ public class AccountAggregate extends CommonAggregate<AccountUpdateEvent, Accoun
         }
         return Optional.empty();
     }
-
-    //    public void replay(AccountMongoDocument accountDocument) {
-//        switch (accountDocument.getEventType()) {
-//            case CREATE:
-//                createEventApply(accountDocument);
-//                break;
-//            case UPDATE:
-//                updateEventApply(accountDocument);
-//                break;
-//            case DELETE:
-//                break;
-//        }
-//    }
-
-//    private void setByCreateEvent(AccountCreateEvent event) {
-//        this.id = event.getId();
-//        this.userName = event.getUserName();
-//        this.password = event.getPassword();
-//        this.nickname = event.getNickname();
-//        this.isActive = event.isActive();
-//        this.website = event.getWebsite();
-//        this.intro = event.getIntro();
-//        this.email = event.getEmail();
-//        this.telephone = event.getTelephone();
-//        this.gender = event.getGender();
-//        this.profileUrl = event.getProfileUrl();
-//    }
 }

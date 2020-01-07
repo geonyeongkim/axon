@@ -1,5 +1,7 @@
 package com.msa.instagram.clone.social.post.aggregate;
 
+import static org.axonframework.modelling.command.AggregateLifecycle.apply;
+
 import com.msa.instagram.clone.common.aggregate.CommonAggregate;
 import com.msa.instagram.clone.social.post.command.PostCreateCommand;
 import com.msa.instagram.clone.social.post.command.PostDeleteCommand;
@@ -9,20 +11,20 @@ import com.msa.instagram.clone.social.post.event.PostCreateEvent;
 import com.msa.instagram.clone.social.post.event.PostDeleteEvent;
 import com.msa.instagram.clone.social.post.event.PostUpdateEvent;
 import com.msa.instagram.clone.social.post.model.vo.Media;
-import lombok.*;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.axonframework.commandhandling.CommandHandler;
-import org.axonframework.commandhandling.model.AggregateIdentifier;
-import org.axonframework.eventsourcing.EventSourcingHandler;
-import org.axonframework.spring.stereotype.Aggregate;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.axonframework.commandhandling.CommandHandler;
+import org.axonframework.eventsourcing.EventSourcingHandler;
+import org.axonframework.spring.stereotype.Aggregate;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

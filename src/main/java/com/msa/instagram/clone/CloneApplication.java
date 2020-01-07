@@ -1,5 +1,6 @@
 package com.msa.instagram.clone;
 
+import org.axonframework.springboot.autoconfig.AxonServerAutoConfiguration;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;

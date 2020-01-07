@@ -14,10 +14,11 @@ public class PostConfig {
 
     @Bean
     public Snapshotter postSnapShotter(EventStore eventStore) {
-        return new AggregateSnapshotter(
-                eventStore,
-                new GenericAggregateFactory<>(PostAggregate.class)
-        );
+        return AggregateSnapshotter
+                .builder()
+                .eventStore(eventStore)
+                .aggregateFactories(new GenericAggregateFactory<>(PostAggregate.class))
+                .build();
     }
 
     @Bean
@@ -27,6 +28,6 @@ public class PostConfig {
 
     @Bean
     public EventSourcingRepository<PostAggregate> postAggregateEventSourcingRepository(EventStore eventStore, SnapshotTriggerDefinition postSnapshotTriggerDefinition) {
-        return new EventSourcingRepository<>(PostAggregate.class, eventStore, postSnapshotTriggerDefinition);
+        return EventSourcingRepository.builder(PostAggregate.class).eventStore(eventStore).snapshotTriggerDefinition(postSnapshotTriggerDefinition).build();
     }
 }

@@ -1,11 +1,10 @@
 package com.msa.instagram.clone.social.like.command;
 
 import com.msa.instagram.clone.social.like.model.vo.CommentLikeRequest;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.ToString;
-import org.axonframework.commandhandling.TargetAggregateIdentifier;
-
-import java.util.UUID;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 @Getter
 @ToString

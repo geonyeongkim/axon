@@ -1,5 +1,7 @@
 package com.msa.instagram.clone.social.like.aggregate;
 
+import static org.axonframework.modelling.command.AggregateLifecycle.apply;
+
 import com.msa.instagram.clone.social.like.command.CommentLikeCommand;
 import com.msa.instagram.clone.social.like.command.PostLikeCommand;
 import com.msa.instagram.clone.social.like.command.UnLikeCommand;
@@ -7,19 +9,16 @@ import com.msa.instagram.clone.social.like.enums.LikeType;
 import com.msa.instagram.clone.social.like.event.CommentLikeEvent;
 import com.msa.instagram.clone.social.like.event.PostLikeEvent;
 import com.msa.instagram.clone.social.like.event.UnLikeEvent;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.CommandHandler;
-import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.eventsourcing.EventSourcingHandler;
+import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
-
-import java.util.Objects;
-
-import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 
 @Slf4j
 @Setter

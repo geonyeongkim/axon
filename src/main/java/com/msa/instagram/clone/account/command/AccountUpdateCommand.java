@@ -6,7 +6,7 @@ import com.msa.instagram.clone.common.command.UpdateCommand;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.axonframework.commandhandling.TargetAggregateIdentifier;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 /**
  * Created by geonyeong.kim on 2019-12-23
