@@ -5,13 +5,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.SimpleCommandBus;
 import org.axonframework.common.transaction.TransactionManager;
+import org.axonframework.eventhandling.tokenstore.TokenStore;
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.axonframework.extensions.mongo.DefaultMongoTemplate;
 import org.axonframework.extensions.mongo.eventsourcing.eventstore.MongoEventStorageEngine;
+import org.axonframework.extensions.mongo.eventsourcing.tokenstore.MongoTokenStore;
 import org.axonframework.messaging.interceptors.CorrelationDataInterceptor;
 import org.axonframework.queryhandling.SimpleQueryBus;
+import org.axonframework.serialization.Serializer;
 import org.axonframework.spring.config.AxonConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,6 +47,11 @@ public class AxonConfig {
                 new CorrelationDataInterceptor<>(axonConfiguration.correlationDataProviders())
         );
         return commandBus;
+    }
+
+    @Bean
+    public TokenStore tokenStore(Serializer serializer, MongoClient mongoClient) {
+        return MongoTokenStore.builder().serializer(serializer).mongoTemplate(DefaultMongoTemplate.builder().mongoDatabase((mongoClient)).build()).build();
     }
 
 //    @Bean
